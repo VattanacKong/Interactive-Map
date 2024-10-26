@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Cambodia Map Demo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/main.css') }}">
+</head>
+<body>
+    <form method="post" action="/search">
+        <label for="origin">Origin:</label>
+        <select id="origin" name="origin" required>
+            {% for key in content.keys()%}
+                <option value="{{key}}"{%if selected_origin ==key%}selected{%endif%}>{{key}}</option>
+            {% endfor %}
+        </select>
+        <label for="destination">Destination:</label>
+        <select id="destination" name="destination" required>
+            {% for key in content.keys()%}
+                <option value="{{key}}"{%if selected_destination ==key%}selected{%endif%}>{{key}}</option>
+            {% endfor %}
+        </select>
+        <label for="algorithm">Algorithm:</label>
+        <select id="algorithm" name="algorithm" required>
+            <option value="A*"{%if selected_algorithm =="A*"%}selected{%endif%}>A*</option>
+            <option value="BFS"{%if selected_algorithm =="BFS"%}selected{%endif%}>BFS</option>
+            <option value="DFS"{%if selected_algorithm =="DFS"%}selected{%endif%}>DFS</option>
+            <option value="GBFS"{%if selected_algorithm =="GBFS"%}selected{%endif%}>GBFS</option>
+        </select>
+        <button type="submit">Search</button>
+    </form>
+    <div class='result'>
+        <p>Distance: {{ Distance }} km</p>
+        <p>Duration: {{ Duration[0] }} hour {{ Duration[1] }} min<p>
+        <p>Path: 
+            {% if Path %}
+                {{ ' => '.join(Path) }}
+            {% else %}
+                {{ selected_destination }}
+            {% endif %}
+        </p>
+        
+    </div>
+    {% if map_html %}
+    <div class="map-container">
+        {{ map_html|safe }}
+    </div>
+    {% endif %}
+</body>
+</html>
